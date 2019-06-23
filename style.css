@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "BisonX";
+  src: url("./fonts/Bison-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  margin-top: 8%;
+  background-color: #fff;
+}
+
+h1 {
+  font-family: bajern;
+  text-align: center;
+  font-size: 25vmin;
+  color: rgb(44, 44, 44);
+}
+
+label {
+  font: 400 11px system-ui;
+  text-transform: uppercase;
+  color: dimgray;
+}
+
+input {
+  /* border-color: rgb(226, 196, 121) !important; */
+}
+
+p {
+  /* color: gainsboro; */
+  font: 400 11px system-ui;
+  text-transform: uppercase;
+}
+
+.success,
+.error {
+  color: white;
+  padding: 5px;
+  margin: 5px 0 15px 0;
+}
+
+.success {
+  background: lime;
+}
+
+.error {
+  background: red;
+}
+
+td,
+th {
+  font: 400 11px system-ui;
+  text-transform: uppercase;
+}
+
+th {
+  filter: grayscale(100%);
+  cursor: pointer;
+  user-select: none;
+}
+
+th a {
+  text-decoration: none;
+}
+
+.alert {
+  font: 400 11px system-ui;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
+  transition: 0.1s linear;
+}
