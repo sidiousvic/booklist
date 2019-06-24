@@ -9,14 +9,13 @@ class Book {
 class UI {
   addBookToList(book) {
     const list = document.getElementById("book-list");
-
     // create <tr> element
     const row = document.createElement("tr");
     // append HTML
     row.innerHTML = `<td>${book.title}</td>
         <td>${book.author}</td>
         <td>${book.isbn}</td>
-        <th class="remove-book"><a href="#">❌</th>`;
+        <th class="remove-book"><a href="#" class="x">❌</th>`;
     // append to row
     list.appendChild(row);
   }
@@ -50,8 +49,50 @@ class UI {
   }
 }
 
+class Store {
+  static getBooks() {
+    // fetch books from local storage
+    let books;
+    if (localStorage.getItem("books") === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem("books"));
+    }
+    return books;
+  }
+
+  static displayBooks() {
+    const books = Store.getBooks();
+    books.forEach(book => {
+      const ui = new UI();
+      ui.addBookToList(book);
+    });
+  }
+
+  static addBook(book) {
+    const books = Store.getBooks();
+    // add book to local storage
+    books.push(book);
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+
+  static removeBook(book) {
+    const books = Store.getBooks();
+    // remove from local storage (avoids removing duplicates)
+    for (let i in books) {
+      console.log(books[i]);
+      if (book === books[i].isbn) books.splice(i, 1);
+      break;
+    }
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+}
+
+// display books on DOM load
+document.addEventListener("DOMContentLoaded", Store.displayBooks());
+
 //EVENT LISTENERS
-// event listener for form
+
 document.getElementById("book-form").addEventListener("submit", function(e) {
   // get form values
   const title = document.getElementById("title").value,
@@ -59,7 +100,6 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
     isbn = document.getElementById("isbn").value;
   // instantiate book and ui
   const book = new Book(title, author, isbn);
-
   // instantiate UI
   const ui = new UI();
   console.log(ui);
@@ -71,25 +111,25 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
     // add book to ui
     ui.addBookToList(book);
     console.log(book);
-
+    // store in local storage
+    Store.addBook(book);
     // success alert
     ui.showAlert("Book added", "success");
-
     // clear fields
     ui.clearFields();
-
-    // store in local storage
-    // storeBookInLocalStorage(book);
   }
-
   e.preventDefault();
 });
 
-// event listener for delete
 document.getElementById("book-list").addEventListener("click", function(e) {
-  //instantiate UI
-  const ui = new UI();
-  console.log(ui);
-  ui.removeBook(e.target);
-  ui.showAlert("Book removed", "success");
+  if (e.target.classList.contains("x")) {
+    //instantiate UI
+    const ui = new UI();
+    // remove book from UI
+    ui.removeBook(e.target);
+    // remove from local storage
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+    // display alert
+    ui.showAlert("Book removed", "success");
+  }
 });
