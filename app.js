@@ -66,21 +66,21 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
   // validate
   if (title === "" || author === "" || isbn === "") {
     // error alert
-    return ui.showAlert("Please fill all fields", "error");
+    ui.showAlert("Please fill all fields", "error");
+  } else {
+    // add book to ui
+    ui.addBookToList(book);
+    console.log(book);
+
+    // success alert
+    ui.showAlert("Book added", "success");
+
+    // clear fields
+    ui.clearFields();
+
+    // store in local storage
+    // storeBookInLocalStorage(book);
   }
-
-  // add book to ui
-  ui.addBookToList(book);
-  console.log(book);
-
-  // success alert
-  ui.showAlert("Book added", "success");
-
-  // clear fields
-  ui.clearFields();
-
-  // store in local storage
-  // storeBookInLocalStorage(book);
 
   e.preventDefault();
 });
