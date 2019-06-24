@@ -1,62 +1,57 @@
-// book constuctor
-
-function Book(title, author, isbn) {
-  this.title = title;
-  this.author = author;
-  this.isbn = isbn;
+class Book {
+  constructor(title, author, isbn) {
+    this.title = title;
+    this.author = author;
+    this.isbn = isbn;
+  }
 }
 
-// UI constructor
-function UI() {}
+class UI {
+  addBookToList(book) {
+    const list = document.getElementById("book-list");
 
-// add book to list
-UI.prototype.addBookToList = function(book) {
-  const list = document.getElementById("book-list");
+    // create <tr> element
+    const row = document.createElement("tr");
+    // append HTML
+    row.innerHTML = `<td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.isbn}</td>
+        <th class="remove-book"><a href="#">❌</th>`;
+    // append to row
+    list.appendChild(row);
+  }
 
-  // create <tr> element
-  const row = document.createElement("tr");
-  // append HTML
-  row.innerHTML = `<td>${book.title}</td>
-  <td>${book.author}</td>
-  <td>${book.isbn}</td>
-  <th class="delete-book"><a href="#">❌</th>`;
-  // append to row
-  list.appendChild(row);
-};
+  showAlert(message, className) {
+    // create div
+    const div = document.createElement("div");
+    // add classes
+    div.className = `alert ${className} u-full-width`;
+    // add text
+    div.appendChild(document.createTextNode(message));
+    // get parent
+    const container = document.querySelector(".container");
+    // insert alert and display
+    container.appendChild(div);
+    // timeout
+    setTimeout(function() {
+      document.querySelector(".alert").remove();
+    }, 3000);
+  }
 
-// show alert
-UI.prototype.showAlert = function(message, className) {
-  // creare div
-  const div = document.createElement("div");
-  // add classes
-  div.className = `alert ${className} u-full-width`;
-  // add text
-  div.appendChild(document.createTextNode(message));
-  // get parent
-  const container = document.querySelector(".container");
-  const form = document.querySelector("h1");
-  // insert alert and display
-  container.appendChild(div);
-  // timeout
-  setTimeout(function() {
-    document.querySelector(".alert").remove();
-  }, 3000);
-};
+  removeBook(target) {
+    if (target.parentElement.className === "remove-book")
+      target.parentElement.parentElement.remove();
+  }
 
-// remove item
-UI.prototype.removeBook = function(target) {
-  if (target.parentElement.className === "delete-book")
-    target.parentElement.parentElement.remove();
-};
+  clearFields() {
+    document.getElementById("title").value = "";
+    document.getElementById("author").value = "";
+    document.getElementById("isbn").value = "";
+  }
+}
 
-// clear fields
-UI.prototype.clearFields = function() {
-  document.getElementById("title").value = "";
-  document.getElementById("author").value = "";
-  document.getElementById("isbn").value = "";
-};
-
-// event listeners
+//EVENT LISTENERS
+// event listener for form
 document.getElementById("book-form").addEventListener("submit", function(e) {
   // get form values
   const title = document.getElementById("title").value,
@@ -67,14 +62,17 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
 
   // instantiate UI
   const ui = new UI();
-
+  console.log(ui);
   // validate
   if (title === "" || author === "" || isbn === "") {
     // error alert
     return ui.showAlert("Please fill all fields", "error");
   }
+
   // add book to ui
   ui.addBookToList(book);
+  console.log(book);
+
   // success alert
   ui.showAlert("Book added", "success");
 
@@ -82,7 +80,7 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
   ui.clearFields();
 
   // store in local storage
-  //   storeBookInLocalStorage(book);
+  // storeBookInLocalStorage(book);
 
   e.preventDefault();
 });
@@ -91,6 +89,7 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
 document.getElementById("book-list").addEventListener("click", function(e) {
   //instantiate UI
   const ui = new UI();
+  console.log(ui);
   ui.removeBook(e.target);
   ui.showAlert("Book removed", "success");
 });
