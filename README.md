@@ -1,1 +1,5 @@
-# booklist
+# Booklist
+
+A booklist app. 📖
+
+🍍 sidiousvic
