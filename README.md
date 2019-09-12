@@ -2,4 +2,4 @@
 
 A booklist app. 📖
 
-🍍 sidiousvic
+@sidiousvic
